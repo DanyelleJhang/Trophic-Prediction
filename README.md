@@ -1,4 +1,4 @@
-# **Appling Machine Learning Model to predict biological role of fungi on the basis of genomic profile (Developing)**
+# **Appling Machine Learning Model to predict biological role of fungi on the basis of genomic profile**
 
 ## Prediction Pipeline
 ![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Main_Pipeline.png)
