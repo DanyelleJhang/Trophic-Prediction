@@ -1,14 +1,14 @@
 # **Appling Machine Learning Model to predict biological role of fungi on the basis of genomic profile (Developing)**
 
 ## Prediction Pipeline
-![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/Pic/Main_Pipeline.png)
+![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Main_Pipeline.png)
 
 
 ### Motivation
 
 - This study aims to develop a computational model searching for potential biological function and assist experimental study in the future
 
-![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Main_Pipeline.png)
+![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Motivation.png)
 
 ### Research Purpose
 
