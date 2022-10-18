@@ -1,0 +1,119 @@
+mkdir: 無法建立目錄‘/Data_out/’: 拒絕不符權限的操作
+Descriptor type: AAC
+Descriptor type: EAAC
+Error: for "EAAC" encoding, the input fasta sequences should be with equal length. 
+
+
+Descriptor type: CKSAAP
+Error: all the sequence length should be larger than the (gap value) + 2 = 7
+
+
+Descriptor type: DPC
+Descriptor type: DDE
+Descriptor type: TPC
+Descriptor type: BINARY
+Error: for "BINARY" encoding, the input fasta sequences should be with equal length. 
+
+
+Descriptor type: GAAC
+Descriptor type: EGAAC
+Error: for "EGAAC" encoding, the input fasta sequences should be with equal length. 
+
+
+Descriptor type: CKSAAGP
+Error: all the sequence length should be greater than the (gap value) + 2 = 7
+
+
+Descriptor type: GDPC
+Descriptor type: GTPC
+Descriptor type: AAINDEX
+Error: for "AAINDEX" encoding, the input fasta sequences should be with equal length. 
+
+
+Descriptor type: ZSCALE
+Error: for "ZSCALE" encoding, the input fasta sequences should be with equal length. 
+
+
+Descriptor type: BLOSUM62
+Error: for "BLOSUM62" encoding, the input fasta sequences should be with equal length. 
+
+
+Descriptor type: NMBroto
+Error: all the sequence length should be larger than the nlag+1: 31
+
+
+Descriptor type: Moran
+Error: all the sequence length should be larger than the nlag+1: 31
+
+
+Descriptor type: Geary
+Error: all the sequence length should be larger than the nlag+1: 31
+
+
+Descriptor type: CTDC
+Descriptor type: CTDT
+Descriptor type: CTDD
+Descriptor type: CTriad
+Error: for "CTriad" encoding, the input fasta sequences should be greater than 3. 
+
+
+Descriptor type: KSCTriad
+Error: for "KSCTriad" encoding, the input fasta sequences should be greater than (2*gap+3). 
+
+
+Descriptor type: SOCNumber
+Error: all the sequence length should be larger than the nlag+1: 31
+
+
+Descriptor type: QSOrder
+Error: all the sequence length should be larger than the nlag+1: 31
+
+
+Descriptor type: PAAC
+Error: all the sequence length should be larger than the lambdaValue+1: 31
+
+
+Descriptor type: APAAC
+Error: all the sequence length should be larger than the lambdaValue+1: 31
+
+
+Descriptor type: KNNprotein
+Traceback (most recent call last):
+  File "/data/home/kaijyun/Feature_Production/iFeature/iFeature.py", line 55, in <module>
+    encodings = eval(myFun)
+  File "<string>", line 1, in <module>
+  File "/data/home/kaijyun/Feature_Production/iFeature/codes/KNNprotein.py", line 48, in KNNprotein
+    if os.path.exists(labelFile) == False:
+  File "/data/home/kaijyun/anaconda3/lib/python3.8/genericpath.py", line 19, in exists
+    os.stat(path)
+TypeError: stat: path should be string, bytes, os.PathLike or integer, not NoneType
+Descriptor type: KNNpeptide
+Error: please specify the directory of train file ["--train"] and the label file ["--label"]
+Descriptor type: PSSM
+Error: for "PSSM" encoding, the input fasta sequences should be with equal length. 
+
+
+Descriptor type: SSEC
+Error: please specify the directory of predicted protein disorder files by "--path"
+Descriptor type: SSEB
+Error: for "SSEB" encoding, the input fasta sequences should be with equal length. 
+
+
+Descriptor type: Disorder
+Error: for "Disorder" encoding, the input fasta sequences should be with equal length. 
+
+
+Descriptor type: DisorderC
+Error: please specify the directory of predicted protein disorder files by "--path"
+Descriptor type: DisorderB
+Error: for "DisorderB" encoding, the input fasta sequences should be with equal length. 
+
+
+Descriptor type: ASA
+Error: for "ASA" encoding, the input fasta sequences should be with equal length. 
+
+
+Descriptor type: TA
+Error: for "TA" encoding, the input fasta sequences should be with equal length. 
+
+

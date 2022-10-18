@@ -1,0 +1,22 @@
+nohup: ignoring input
+*.fa
+Start to Run
+Traceback (most recent call last):
+  File "/data/home/kaijyun/0_Code/1_summarize_pfam_table_2.py", line 113, in <module>
+    data = pd.read_csv(args.summarize_pfam_out,sep="\t",header=None,names=["domain_name","domain_location"])
+  File "/data/home/kaijyun/anaconda3/lib/python3.8/site-packages/pandas/io/parsers.py", line 610, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "/data/home/kaijyun/anaconda3/lib/python3.8/site-packages/pandas/io/parsers.py", line 462, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "/data/home/kaijyun/anaconda3/lib/python3.8/site-packages/pandas/io/parsers.py", line 819, in __init__
+    self._engine = self._make_engine(self.engine)
+  File "/data/home/kaijyun/anaconda3/lib/python3.8/site-packages/pandas/io/parsers.py", line 1050, in _make_engine
+    return mapping[engine](self.f, **self.options)  # type: ignore[call-arg]
+  File "/data/home/kaijyun/anaconda3/lib/python3.8/site-packages/pandas/io/parsers.py", line 1867, in __init__
+    self._open_handles(src, kwds)
+  File "/data/home/kaijyun/anaconda3/lib/python3.8/site-packages/pandas/io/parsers.py", line 1362, in _open_handles
+    self.handles = get_handle(
+  File "/data/home/kaijyun/anaconda3/lib/python3.8/site-packages/pandas/io/common.py", line 642, in get_handle
+    handle = open(
+FileNotFoundError: [Errno 2] No such file or directory: '*.fa.out.format'
+mv: 無法 stat ‘*_info.fasta’: 沒有此一檔案或目錄
