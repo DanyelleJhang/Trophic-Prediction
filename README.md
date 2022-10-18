@@ -10,12 +10,16 @@
 
 ![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Motivation.png)
 
+
+
 ### Research Purpose
 
 - Is there any possible way to inspect **biological function of** **fungi** through their **peptide** **profile** ?
 
 - How to predict biological function of sequenced metagenome shotgun data from our lab ?
 ![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Research_Purpose.png)
+
+
 
 ### Conceptual Framework
 
@@ -27,12 +31,16 @@
 
 <img src="C:\Users\fabia\Local_Work\Open_Repository\Pic\Conceptual_Framework.png" style="zoom: 50%;" />
 
+
+
 ###  Feature Extraction
 
 - Due to shut-gun sequencing exists incomplete genome, a proportion of gene will be dropped
 
 ![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Feature_Extraction_1.png)
 ![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Feature_Extraction_2.png)
+
+
 
 
 ###  Feature Selection Methods
@@ -82,10 +90,14 @@
 
 ![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Independent.png)
 
+
+
 ### Ensemble Feature Selection Method
 - In general, we selected union opinion from different feature selection methods and filtered out dependent features
 
 ![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/ESMBLE_FS.png)
+
+
 
 ### Ensemble Hierarchical Classification
 - In order to decrease tuning time, we introduce three types of voting style and such prediction value based on discrete value and probability value
