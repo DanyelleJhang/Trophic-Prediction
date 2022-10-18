@@ -107,4 +107,5 @@
   - Type 2: the best model at Nth round (maybe XGB in 2nd round is best but Logistic in 3rd is the best) to vote
 
   - Type 3: vote by all model
+
 ![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Hierarchical_Classification.png)
