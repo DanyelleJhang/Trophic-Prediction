@@ -1,21 +1,21 @@
 # **Appling Machine Learning Model to predict biological role of fungi on the basis of genomic profile (Developing)**
 
 ## Prediction Pipeline
-![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/Pic/Main_Pipeline.png)
+![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Main_Pipeline.png)
 
 
 ### Motivation
 
 - This study aims to develop a computational model searching for potential biological function and assist experimental study in the future
 
-![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/Pic/Motivation.png)
+![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Motivation.png)
 
 ### Research Purpose
 
 - Is there any possible way to inspect **biological function of** **fungi** through their **peptide** **profile** ?
 
 - How to predict biological function of sequenced metagenome shotgun data from our lab ?
-![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/Pic/Research_Purpose.png)
+![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Research_Purpose.png)
 
 ### Conceptual Framework
 
@@ -31,8 +31,8 @@
 
 - Due to shut-gun sequencing exists incomplete genome, a proportion of gene will be dropped
 
-![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/Pic/Feature_Extraction_1.png)
-![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/Pic/Feature_Extraction_2.png)
+![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Feature_Extraction_1.png)
+![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Feature_Extraction_2.png)
 
 
 ###  Feature Selection Methods
@@ -51,7 +51,7 @@
 
 - If different sampled distributions of Single Label are all significant difference, such Feature will be remained
 
-![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/Pic/Discrimination.png)
+![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Discrimination.png)
 
 #### 2. Permutation test approach 
 
@@ -59,14 +59,14 @@
 
 - If such feature significantly difference, we will remain this feature.
 
-![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/Pic/Permutation_Test.png)
+![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Permutation_Test.png)
 
 #### 3. Which is Informative Feature to Labels
 
 - Information Theory is useful metric for measuring the correlation among random variables
 - We will only remain those features which Changed Ratio of Information are greater than 1
 
-![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/Pic/Information.png)
+![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Information.png)
 
 #### 4. Features require to be independent with each other
 
@@ -80,12 +80,12 @@
 
 - P value will not be considered
 
-![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/Pic/Independent.png)
+![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Independent.png)
 
 ### Ensemble Feature Selection Method
 - In general, we selected union opinion from different feature selection methods and filtered out dependent features
 
-![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/Pic/ESMBLE_FS.png)
+![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/ESMBLE_FS.png)
 
 ### Ensemble Hierarchical Classification
 - In order to decrease tuning time, we introduce three types of voting style and such prediction value based on discrete value and probability value
@@ -95,4 +95,4 @@
   - Type 2: the best model at Nth round (maybe XGB in 2nd round is best but Logistic in 3rd is the best) to vote
 
   - Type 3: vote by all model
-![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/Pic/Hierarchical_Classification.png)
+![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Hierarchical_Classification.png)
