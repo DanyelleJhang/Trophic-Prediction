@@ -29,7 +29,7 @@
 | Unannotation Dataset 1 (UN1) | EnsemblFungi failed linking to FUNGuild      |
 | Unannotation Dataset 2 (UN2) | Sequenced metagenome shotgun data in HCL lab |
 
-<img src="C:\Users\fabia\Local_Work\Open_Repository\Pic\Conceptual_Framework.png" style="zoom: 50%;" />
+![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Conceptual_Framework.png)
 
 
 
