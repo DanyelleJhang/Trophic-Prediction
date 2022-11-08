@@ -37,6 +37,7 @@ Tag = args.Tag
 based_on_probability = eval(args.Probability) # "True"
 CPU_Core = int(args.CPU_Core) # 15
 label_name_list = ["trophicMode"] #args.Label_Name
+stratified_sampling = eval(args.Stratified_Sampling)
 """
 ML_Prediction
 	-- Result

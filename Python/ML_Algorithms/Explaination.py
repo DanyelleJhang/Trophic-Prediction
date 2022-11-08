@@ -133,3 +133,6 @@ def multiLabelMulitModelExplaination(input_ml_prediction_path,
 ## 一個MODEL的ROW都從BASE VALUE相加
 # shap.initjs()
 # shap.force_plot(explainer.expected_value[0], shap_values[0][1,:], y_i_test.iloc[1,:])
+
+
+

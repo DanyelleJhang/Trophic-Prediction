@@ -62,111 +62,169 @@ def filter_unknown_label(input_origin_array,input_predicted_array,input_unknown_
 	predicted_filter_array = np.delete(input_predicted_array, input_unknown_index_array, axis=0)
 	return origin_filter_array, predicted_filter_array
 
-#### Mulit Class Random Expectation 
-def random_expectation(input_total_lable_list):
+def get_prediction_result(input_origin_result,input_prediction_result,input_label_information,input_na_index):
+	merge_result = pd.merge(input_origin_result, input_prediction_result, on="ID")
+	# note: should not chang posistion
+	# [0, 1]
+	hard_name_list = ["--Hard_Zero","--Hard_One"]
+	mean_name_list = ["--Negative_mean","--Positive_mean"]
+	median_name_list = ["--Negative_median","--Positive_median"] # note: should not chang posistion
+
+	hard_label_dict = {}
+	for i in input_label_information:
+		hard_label_dict[i]= [i + s for s in hard_name_list]
+	mean_label_dict = {}
+	for i in input_label_information:
+		mean_label_dict[i]= [i + s for s in mean_name_list]
+	median_label_dict = {}
+	for i in input_label_information:
+		median_label_dict[i]= [i + s for s in median_name_list]
+
+	# label_Info[label_name]
+	hard_pred_list = []
+	for i in input_label_information:
+		pred= np.argmax(np.array(merge_result[hard_label_dict[i]]), axis=1)
+		hard_pred_list.append(pred)
+	hard_pred = pd.DataFrame(np.column_stack(hard_pred_list),columns=input_label_information)
+
+	mean_pred_list = []
+	for i in input_label_information:
+		pred= np.argmax(np.array(merge_result[mean_label_dict[i]]), axis=1)
+		mean_pred_list.append(pred)
+	mean_pred = pd.DataFrame(np.column_stack(mean_pred_list),columns=input_label_information)
+
+	median_pred_list = []
+	for i in input_label_information:
+		pred= np.argmax(np.array(merge_result[median_label_dict[i]]), axis=1)
+		median_pred_list.append(pred)
+	median_pred = pd.DataFrame(np.column_stack(median_pred_list),columns=input_label_information)
+
+	true_label = merge_result[input_label_information]
+	
+	true_label_dropna, hard_pred_dropna = filter_unknown_label(np.array(true_label),np.array(hard_pred),input_na_index)
+	true_label_dropna, mean_pred_dropna = filter_unknown_label(np.array(true_label),np.array(mean_pred),input_na_index)
+	true_label_dropna, median_pred_dropna = filter_unknown_label(np.array(true_label),np.array(median_pred),input_na_index)
+	return true_label_dropna, hard_pred_dropna, mean_pred_dropna, median_pred_dropna
+
+def measurement(input_confusion_matrix):
+	TN = input_confusion_matrix[0,0]
+	FP = input_confusion_matrix[0,1]
+	FN = input_confusion_matrix[1,0]
+	TP = input_confusion_matrix[1,1]
+	precision = TP/(TP+FP)
+	recall = TP/(TP+FN)
+	f1 = (2*precision*recall )/(precision + recall)
+	mcc = (TP*TN-FP*FN)/((TP+FP)*(TP+FN)*(TN+FP)*(TN+FN))**0.5
+	normalize_mcc = (mcc+1)/2
+	return precision,recall,f1,mcc,normalize_mcc
+
+def multi_lable_measurement(input_confusion_matrix):
+	if len(input_confusion_matrix.shape) ==3:
+		result_list = []
+		for i in input_confusion_matrix:
+			r = measurement(i)
+			result_list.append(list(r))
+		result_array = np.nansum(np.array(result_list),axis=0)/len(result_list)
+		# precision, recall, f1, mcc, normalize_mcc
+		return result_array
+	elif len(input_confusion_matrix.shape) ==2:
+		r = measurement(input_confusion_matrix)
+		result_list= list(r)
+		result_array = np.array(result_list)
+		# precision, recall, f1, mcc, normalize_mcc
+		return result_array
+	else:
+		raise Exception("shap of confusion matrix should be 2 or 3")
+def multi_lable_evaluation(input_y_true_array, input_y_pred_array):
+	from sklearn.metrics import multilabel_confusion_matrix
+	mll_macro_confusion_matrix = multilabel_confusion_matrix(input_y_true_array, input_y_pred_array)
+	mll_instance_confusion_matrix = multilabel_confusion_matrix(input_y_true_array, input_y_pred_array,samplewise=True)
+	mll_micro_confusion_matrix = sum(mll_macro_confusion_matrix)
+	#              predicted zero     predicted one
+	# true zero       TN                  FP                 
+	# true one        FN                  TP
+	macro_result = multi_lable_measurement(mll_macro_confusion_matrix)
+	instance_result = multi_lable_measurement(mll_instance_confusion_matrix)
+	micro_result = multi_lable_measurement(mll_micro_confusion_matrix)
+	evaluation = np.row_stack((macro_result,instance_result,micro_result))
+	evaluation_result = pd.DataFrame(evaluation,index=["macro avg","samples avg","micro avg"],columns = ["Precision","Recall","F1","MCC","nMCC"])
+	return evaluation_result
+def random_expectation(input_y_array,input_y_name):
+	multilable_freq = dict(pd.DataFrame(input_y_array,columns=input_y_name).sum())
 	from collections import Counter
-	from pandas import DataFrame
-	labe_number = Counter(input_total_lable_list)
+	labe_number = Counter(multilable_freq)
 	labe_probability_dict = {}
 	for k in list(labe_number.keys()):
 		labe_probability_dict[k] = labe_number[k]/sum(labe_number.values())
-	# Multi class random expectation 
+
+	######################### label based ############################
+	#              predicted zero     predicted one
+	# true zero       TN                  FP                 
+	# true one        FN                  TP
 	lable_type= list(labe_probability_dict.keys())
-	# = np.zeros((len(lable_type),len(lable_type)), dtype=float)
-	#np.add.at(r, (2,3), 5)
 	confusion_matrix = np.zeros((len(lable_type),len(lable_type)), dtype=float)
 	for p_i,p_k in enumerate(lable_type):
 		for t_i,t_k in enumerate(lable_type):
 			probability = labe_probability_dict[p_k]*labe_probability_dict[t_k]
 			np.add.at(confusion_matrix, (int(p_i),int(t_i)), probability)
-	# (Predict, True) => 
-	#          Predict
-	#        TN    FP      
-	# True   FN    TP
 	TP_list = list(np.diagonal(confusion_matrix))
 	np.fill_diagonal(confusion_matrix,0)
-	# => False Negative (class i) [i,:]
 	# => False Positve (class i) [:,i]
+	# => False Negative (class i) [i,:]
 	# Precision (class=i) => TP (class=i) / TP (class=i) + FP (class=i)
 	# Recall (class=i) => TP(class=i) / TP(class=i) + FN(class=i)
-	precision_list = []
-	recall_list = []
+	macro_list = []
+	micro_list = []
 	for i,v in enumerate(TP_list):
-		p = v/(v+sum(confusion_matrix[i,:]))
-		r = v/(v+sum(confusion_matrix[:,i]))
-		precision_list.append(p)
-		recall_list.append(r)
-	recall_array = np.array(recall_list)
-	precision_array = np.array(precision_list)
-	F1_array = 2*(recall_array*precision_array)/(recall_array+precision_array)
-	support_array = np.array(list(labe_probability_dict.values()))
-	performance_matrix = np.stack((precision_array,recall_array,F1_array,support_array),axis=-1)
-	maro_avg_array = performance_matrix.sum(axis=0)/len(performance_matrix)
-	np.add.at(maro_avg_array,-1,np.nan)
-	weight_avg_array= np.array([sum(precision_array*support_array),sum(recall_array*support_array),sum(F1_array*support_array),sum(support_array)])
-	np.add.at(weight_avg_array,-1,np.nan)
-	#Total_accuracy = sum(TP_list)/(sum(TP_list)+sum(sum(confusion_matrix)))
-	#total_accuracy_array = np.array([np.nan,np.nan,np.nan,Total_accuracy])
-	performance_matrix_2 = np.vstack((performance_matrix,maro_avg_array,weight_avg_array))
-	performance_dataframe = DataFrame(performance_matrix_2,columns=["random_precision","random_recall","random_f1-score","support_proportion"],index=lable_type+["macro avg","weighted avg"])
-	return performance_dataframe
+		TP = v
+		TN = sum(np.delete(np.array(TP_list), i))
+		FP = sum(confusion_matrix[:,i])
+		FN = sum(confusion_matrix[i,:])
+		macro_cm = np.array([[TN,FP],
+							 [FN,TP]])
+		macro_reults = measurement(macro_cm)
+		micro_list.append(macro_cm)
+		macro_list.append(list(macro_reults))
 
-def Random_Expectation(input_y_array,input_y_name,input_lable_type):
-	from pandas import DataFrame
-	if input_lable_type == "MultiLabel":
-		multilable_freq = dict(DataFrame(input_y_array,columns=input_y_name).sum())
-		R = random_expectation(multilable_freq)
-	if input_lable_type == "MultiClass":
-		y_name_dict = {}
-		for i,k in enumerate(input_y_name):
-			y_name_dict[i]=k
-		multiclass_freq = np.array([y_name_dict[i] for i in input_y_array])
-		R = random_expectation(multiclass_freq)
-	return R
-# Multi_Class_Random_Expectation({"A":72,"B":30,"C":3000,"D":100,"E":97,"T":89,"G":20,"R":9})
+	macro_random_expectaion = np.average(np.array(macro_list),axis=0)
+	micro_random_expectaion= np.array(measurement(np.average(np.array(micro_list),axis=0)))
+	########################## instance based ##########################
+	#              predicted zero     predicted one
+	# true zero       TN                  FP                 
+	# true one        FN                  TP
+	labe_probability = np.array(list(labe_probability_dict.values()))
+	instance_list = []
+	for i,v in enumerate(labe_probability):
+		TP = v
+		TN = TN = sum(np.delete(np.array(labe_probability), i))
 
-def Result_Report(input_y_val_test,input_y_val_pre,input_y_test,input_y_pre,input_y_val_test_NA_index,input_y_test_NA_index,input_y_name,input_ALG_Lable_Type):
-	from sklearn.metrics import classification_report
-	from pandas import DataFrame, merge
-	input_y_val_test,input_y_val_pre = filter_unknown_label(input_y_val_test,input_y_val_pre,input_y_val_test_NA_index)
-	input_y_test,input_y_pre = filter_unknown_label(input_y_test,input_y_pre,input_y_test_NA_index)
-	# Random_Expectation(input_y_array,input_y_name,input_lable_type)
-	Val_Report = DataFrame(classification_report(input_y_val_test,input_y_val_pre,target_names=input_y_name, output_dict=True)).T
-	Val_Random_Expectation = Random_Expectation(input_y_val_test,input_y_name,input_ALG_Lable_Type)
-	Val_Result = merge(Val_Report, Val_Random_Expectation, left_index=True, right_index=True)
-	Val_Result.columns = "validation_"+Val_Result.columns
-	Test_Report = DataFrame(classification_report(input_y_test,input_y_pre,target_names=input_y_name, output_dict=True)).T
-	Test_Random_Expectation = Random_Expectation(input_y_test,input_y_name,input_ALG_Lable_Type)
-	Test_Result = merge(Test_Report, Test_Random_Expectation, left_index=True, right_index=True)
-	Test_Result.columns = "test_"+Test_Result.columns
-	All_Result = merge(Val_Result, Test_Result, left_index=True, right_index=True)
-	All_Result_1 = All_Result.drop(index=["macro avg","weighted avg"]).fillna(0)
-	macro_avg_list = []
-	weighted_avg_list = []
-	for i in list(All_Result_1.columns):
-		if "validation_" in i:
-			if i == "validation_support":
-				total_number = All_Result_1[i].sum(axis=0)
-				macro_avg_list.append(total_number)
-				weighted_avg_list.append(total_number)
-			else:
-				macro = All_Result_1[i].sum(axis=0)/len(All_Result_1[i])
-				weighted = (All_Result_1[i]*All_Result_1["validation_support"]).sum(axis=0)/All_Result_1["validation_support"].sum(axis=0)
-				macro_avg_list.append(macro)
-				weighted_avg_list.append(weighted)
-		elif "test_" in i:
-			if i == "test_support_proportion":
-				total_number = All_Result_1[i].sum(axis=0)
-				macro_avg_list.append(total_number)
-				weighted_avg_list.append(total_number)
-			else:
-				macro = All_Result_1[i].sum(axis=0)/len(All_Result_1[i])
-				weighted = (All_Result_1[i]*All_Result_1["test_support_proportion"]).sum(axis=0)/All_Result_1["test_support_proportion"].sum(axis=0)
-				macro_avg_list.append(macro)
-				weighted_avg_list.append(weighted)
-		else:
-			print("ERROR..........")
-	All_Result.loc["Revised_Macro_Avg"] = macro_avg_list
-	All_Result.loc["Revised_Weighted_Avg"] = weighted_avg_list
-	print("============ All Report Done ==============================================================================")
-	return All_Result
+		from itertools import permutations
+		init_array = np.zeros(len(labe_probability), dtype=float)
+		init_i = len(init_array) # change from len(init_array) -1
+		i = 0 
+		FN_value_list = []
+		while i < init_i:
+			init_array[i] = 1
+			for ii in set(permutations(init_array)):
+				FN_probability= np.nanprod(np.abs(np.array(ii)-labe_probability))
+				FN_value_list.append(FN_probability)
+			i += 1
+		FN = np.sum(FN_value_list)
+
+		init_array = np.zeros(len(1.0-labe_probability), dtype=float)
+		init_i = len(init_array) # change from len(init_array) -1
+		i = 0 
+		FP_value_list = []
+		while i < init_i:
+			init_array[i] = 1
+			for ii in set(permutations(init_array)):
+				FP_probability= np.nanprod(np.abs(np.array(ii)-(1.0-labe_probability)))
+				FP_value_list.append(FP_probability)
+			i += 1
+		FP = np.sum(FP_value_list)
+		instance_results = np.array(measurement(np.array([[TN,FP],[FN,TP]])))
+		instance_list.append(instance_results)
+	instance_random_expectaion = np.average(instance_list,axis=0)
+	random_expectaion= np.row_stack((macro_random_expectaion,instance_random_expectaion,micro_random_expectaion))
+	random_expectaion_result = pd.DataFrame(random_expectaion,index=["macro avg","samples avg","micro avg"],columns = ["Precision","Recall","F1","MCC","nMCC"])
+	return random_expectaion_result
