@@ -35,7 +35,7 @@
 
 ###  Feature Extraction
 
-- Due to shut-gun sequencing exists incomplete genome, a proportion of gene will be dropped
+- Due to shut-gun sequencing, it revealed incomplete genome and a proportion of gene will be dropped
 
 ![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Feature_Extraction_1.png)
 ![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Feature_Extraction_2.png)
@@ -49,7 +49,7 @@
 
   - Permutation test approach 
 
-  -  Heuristic approach based on non-parametric test
+  - Heuristic approach based on non-parametric test
 
 - Which is Informative Feature to Labels
 
@@ -63,7 +63,7 @@
 
 #### 2. Permutation test approach 
 
-- We acquire to comprehend their median of positive feature and negative feature is significantly difference or not instead of greater or less
+- We acquire to comprehend their median of positive feature and negative feature are significantly difference or not instead of greater or less
 
 - If such feature significantly difference, we will remain this feature.
 
@@ -82,7 +82,7 @@
 
 - We will only keep one of feature to utilize
 
-- Those remaining features are weakly relevance to each other
+- Those rest of features are weakly relevance to each other
 
 - Those absolute correlation coefficient value amongst different features which are smaller than 0.3 will be remained.
 
@@ -100,6 +100,6 @@
 
 
 ### Ensemble Hierarchical Classification
-- In order to decrease tuning time, we introduce three types of voting style and such prediction value based on discrete value and probability value
+- In order to increase prediction performance, we introduce weight-average ensemble model
 
 ![image](https://github.com/DanyelleJhang/Appling-Machine-Learning-Model-to-predict-biological-role-of-fungi-on-the-basis-of-genomic-profile/blob/main/WorkLog/Pic/Hierarchical_Classification.png)
