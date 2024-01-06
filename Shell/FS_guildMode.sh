@@ -1,4 +1,4 @@
-user_dir="/home/kaijyun/"
+user_dir="./"
 dos2unix "${user_dir}Code/Python/FS_trophicMode.py"
 dos2unix "${user_dir}Code/Python/FS_guildMode.py"
 mkdir "${user_dir}Data/ML_Prediction/"

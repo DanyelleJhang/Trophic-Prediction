@@ -1,10 +1,10 @@
-user_dir="/home/kaijyun/"
+user_dir="./"
 dos2unix "${user_dir}Code/Python/FS_trophicMode.py"
 dos2unix "${user_dir}Code/Python/FS_guildMode.py"
 mkdir "${user_dir}Data/ML_Prediction/"
 
 declare -a top_rank=(100 150 200)
-declare -a round_num=(2 3 4 5 6 7 8 9 10)
+declare -a round_num=(1 2 3 4 5 6 7 8 9 10)
 #declare -a round_num=(1)
 
 for rank in "${top_rank[@]}"

@@ -1,6 +1,6 @@
-code_dir="/home/kaijyun/Code/"
-data_dir="/home/kaijyun/Data/"
-protein_data_dir="/home/kaijyun/Data/Feature_Preprocessing/Protein_data/"
+code_dir="./Code/"
+data_dir="./Data/"
+protein_data_dir="./Data/Feature_Preprocessing/Protein_data/"
 
 dos2unix "${code_dir}Python/Feature_Production/Count_Table.py"
 dos2unix "${code_dir}Python/Feature_Production/Feature_Concatenation.py"
@@ -16,7 +16,7 @@ python "${code_dir}Python/Feature_Production/Count_Table.py" \
 
 
 
-declare -a round_num=(2 3 4 5 6 7 8 9 10)
+declare -a round_num=(1 2 3 4 5 6 7 8 9 10)
 declare -a top_rank=(100 150 200)
 declare -a comba_num=(2)
 declare -a drop_proportion=(0.95 0.9 0.85 0.8 0.75 0.7 0.65 0.6 0.55 0.5)

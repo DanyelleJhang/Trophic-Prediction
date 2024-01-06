@@ -40,8 +40,10 @@ def singleLabelsingleModelExplaination(input_ml_prediction_path,
 		neg_df = pd.DataFrame(neg_proba_array,columns=input_y_i_X_test.columns)
 		neg_df.insert(0, "Prediction_Type", 0, True)
 
+		pos_df = pd.concat([input_X_test_ID,pos_df],axis=1)
+		neg_df = pd.concat([input_X_test_ID,neg_df],axis=1)
+
 		shap_value_df = pd.concat([pos_df,neg_df],axis=0).reset_index(drop=True)
-		shap_value_df = pd.concat([input_X_test_ID,shap_value_df],axis=1)
 		shap_value_df.to_csv(input_ml_prediction_path+"Result/"+"Model_Explanation/"+y_i_single_model_name.split("/")[-1]+"_proba_explaination--"+input_tag+".txt",sep="\t",header=True,index=False)
 
 		if not os.path.isfile(input_ml_prediction_path+"Result/"+"Model_Explanation/"+'proba_base_value.txt'):
@@ -89,7 +91,7 @@ def singleLabelMulitModelExplaination(input_ml_prediction_path,
 	else:
 		y_i_X_train = input_incomplete_dataframe.groupby(["genome_file_name"]).sample(n=1).reset_index(drop=True)[input_feature_selection_info[input_y_name]]	
 	y_i_X_test = input_complete_dataframe[input_feature_selection_info[input_y_name]]
-	X_test_ID = input_complete_dataframe["genome_file_name"]
+	X_test_ID = input_complete_dataframe[["genome_file_name"]]
 	y_i_model_list = list(filter(lambda x: input_y_name in x,input_ensemble_model_list))
 	save = Parallel(n_jobs=n_jobs)(delayed(singleLabelsingleModelExplaination)(input_ml_prediction_path=input_ml_prediction_path,
 																			   input_y_i_model_name=y_i_model_list[i],

@@ -477,6 +477,8 @@ def Estimator(Algorithm_Name,cpu_core):
 ## 2022/5/18 revise
 def integratSingleModel(Algorithm_Name,Learning_Type,Hyperparameter_Method,cpu_core,inner_cv,best_score,parameters,SelfTrain_threshold=0.75,SelfTrain_max_iter=100):
 	import warnings
+	from sklearn.pipeline import make_pipeline
+	from sklearn.preprocessing import StandardScaler
 	warnings.simplefilter("ignore")
 	Base_Estimator = Estimator(Algorithm_Name,cpu_core)
 	if Learning_Type != "SelfTraining":
@@ -497,6 +499,8 @@ def integratSingleModel(Algorithm_Name,Learning_Type,Hyperparameter_Method,cpu_c
 		from sklearn.model_selection import RandomizedSearchCV
 		par = parameters['Randomized_parameters']
 		CLF = RandomizedSearchCV(_clf_,par[Algorithm_Name], cv=inner_cv,n_jobs=cpu_core,scoring=best_score)
-	return CLF
+	# model = make_pipeline(StandardScaler(), CLF)
+	model = CLF
+	return model
 
 

@@ -11,7 +11,7 @@ from utility.usage_measurement import hardware_usage
 def dismantle_data(input_data_dir,input_feature_data_name,input_label_name_list):
 	import warnings
 	warnings.filterwarnings('ignore')
-	chunk = pd.read_csv(str(input_data_dir)+str(input_feature_data_name),sep="\t",chunksize=1000,low_memory=False,dtype=int,converters={"genome_file_name":str,"Calculation_Characteristics":str})
+	chunk = pd.read_csv(str(input_data_dir)+str(input_feature_data_name),sep="\t",chunksize=1000,low_memory=False,dtype=float,converters={"genome_file_name":str,"Calculation_Characteristics":str})
 	#end = time.time()
 	#print("Read csv with chunks: ",(end-start),"sec")
 	Feature = pd.concat(chunk,ignore_index=True)
@@ -110,7 +110,7 @@ def train_test_split_at_least_one_label(X,y,input_Label_type,testing_size,input_
 		if input_Label_type == "MultiLabel":
 			while True:
 				i = np.random.randint(low=0, high=1000000, size=1, dtype=int)[0]
-				feature_train, feature_test, label_train, label_test, = train_test_split(X, y,test_size=testing_size, random_state=i)
+				feature_train, feature_test, label_train, label_test = train_test_split(X, y,test_size=testing_size, random_state=i)
 				if np.all(label_train.sum(axis=0)>0) == True:
 					break # 連 else 都會直接跳掉
 				else:
@@ -118,7 +118,7 @@ def train_test_split_at_least_one_label(X,y,input_Label_type,testing_size,input_
 		if input_Label_type == "MultiClass":
 			while True:
 				i = np.random.randint(low=0, high=1000000, size=1, dtype=int)[0]
-				feature_train, feature_test, label_train, label_test, = train_test_split(X, y,test_size=testing_size, random_state=i)
+				feature_train, feature_test, label_train, label_test = train_test_split(X, y,test_size=testing_size, random_state=i)
 				if set(label_train) == set(Label_test):
 					break # 連 else 都會直接跳掉
 				else:

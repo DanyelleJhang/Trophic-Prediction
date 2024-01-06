@@ -33,6 +33,7 @@ def F1Score(y_1Darray,y_pred_1Darray):
 	return evaluation
 
 def find_TP_ID(input_y_pred_df,input_y_array,input_y_name,input_X_array,match):
+	
 	y_pred_df = input_y_pred_df.set_index("ID")
 	y_pred_name = list(y_pred_df.columns)
 	y_true_name = list(map(lambda x: x + "_true",input_y_name))
@@ -62,7 +63,7 @@ def filter_unknown_label(input_origin_array,input_predicted_array,input_unknown_
 	predicted_filter_array = np.delete(input_predicted_array, input_unknown_index_array, axis=0)
 	return origin_filter_array, predicted_filter_array
 
-def get_prediction_result(input_origin_result,input_prediction_result,input_label_information,input_na_index):
+def get_prediction_result(input_origin_result,input_prediction_result,input_label_information,input_na_index,input_transform):
 	merge_result = pd.merge(input_origin_result, input_prediction_result, on="ID")
 	# note: should not chang posistion
 	# [0, 1]
@@ -83,24 +84,33 @@ def get_prediction_result(input_origin_result,input_prediction_result,input_labe
 	# label_Info[label_name]
 	hard_pred_list = []
 	for i in input_label_information:
+		#if input_transform[i]["Hard"] == True:
+		#pred= np.argmin(np.array(merge_result[hard_label_dict[i]]), axis=1)
+		#else:
 		pred= np.argmax(np.array(merge_result[hard_label_dict[i]]), axis=1)
 		hard_pred_list.append(pred)
 	hard_pred = pd.DataFrame(np.column_stack(hard_pred_list),columns=input_label_information)
 
 	mean_pred_list = []
 	for i in input_label_information:
-		pred= np.argmax(np.array(merge_result[mean_label_dict[i]]), axis=1)
+		if input_transform[i]["Mean"] == True:
+			pred= np.argmin(np.array(merge_result[mean_label_dict[i]]), axis=1)
+		else:
+			pred= np.argmax(np.array(merge_result[mean_label_dict[i]]), axis=1)
 		mean_pred_list.append(pred)
 	mean_pred = pd.DataFrame(np.column_stack(mean_pred_list),columns=input_label_information)
 
 	median_pred_list = []
 	for i in input_label_information:
-		pred= np.argmax(np.array(merge_result[median_label_dict[i]]), axis=1)
+		if input_transform[i]["Median"] == True:
+			pred= np.argmin(np.array(merge_result[median_label_dict[i]]), axis=1)
+		else:
+			pred= np.argmax(np.array(merge_result[median_label_dict[i]]), axis=1)
 		median_pred_list.append(pred)
 	median_pred = pd.DataFrame(np.column_stack(median_pred_list),columns=input_label_information)
 
 	true_label = merge_result[input_label_information]
-	
+
 	true_label_dropna, hard_pred_dropna = filter_unknown_label(np.array(true_label),np.array(hard_pred),input_na_index)
 	true_label_dropna, mean_pred_dropna = filter_unknown_label(np.array(true_label),np.array(mean_pred),input_na_index)
 	true_label_dropna, median_pred_dropna = filter_unknown_label(np.array(true_label),np.array(median_pred),input_na_index)
@@ -111,12 +121,18 @@ def measurement(input_confusion_matrix):
 	FP = input_confusion_matrix[0,1]
 	FN = input_confusion_matrix[1,0]
 	TP = input_confusion_matrix[1,1]
+
+	accuracy = (TP+TN)/(TN+FP+FN+TP)
+	false_positive_rate = FP/(FP+TN)
+	false_negative_rate = FN/(FN+TP) # miss rate
+	zero_rate = (TN+FN)/(TN+FP+FN+TP) # zero_rate
+	specificity = TN/(TN+FP) # specificity
 	precision = TP/(TP+FP)
 	recall = TP/(TP+FN)
 	f1 = (2*precision*recall )/(precision + recall)
 	mcc = (TP*TN-FP*FN)/((TP+FP)*(TP+FN)*(TN+FP)*(TN+FN))**0.5
 	normalize_mcc = (mcc+1)/2
-	return precision,recall,f1,mcc,normalize_mcc
+	return accuracy, false_positive_rate, false_negative_rate,zero_rate,specificity, precision,recall,f1,mcc,normalize_mcc
 
 def multi_lable_measurement(input_confusion_matrix):
 	if len(input_confusion_matrix.shape) ==3:
@@ -125,13 +141,13 @@ def multi_lable_measurement(input_confusion_matrix):
 			r = measurement(i)
 			result_list.append(list(r))
 		result_array = np.nansum(np.array(result_list),axis=0)/len(result_list)
-		# precision, recall, f1, mcc, normalize_mcc
+		# accuracy, false_positive_rate, false_negative_rate,zero_rate,specificity, precision, recall, f1, mcc, normalize_mcc
 		return result_array
 	elif len(input_confusion_matrix.shape) ==2:
 		r = measurement(input_confusion_matrix)
 		result_list= list(r)
 		result_array = np.array(result_list)
-		# precision, recall, f1, mcc, normalize_mcc
+		# accuracy, false_positive_rate, false_negative_rate,zero_rate,specificity,precision, recall, f1, mcc, normalize_mcc
 		return result_array
 	else:
 		raise Exception("shap of confusion matrix should be 2 or 3")
@@ -147,7 +163,7 @@ def multi_lable_evaluation(input_y_true_array, input_y_pred_array):
 	instance_result = multi_lable_measurement(mll_instance_confusion_matrix)
 	micro_result = multi_lable_measurement(mll_micro_confusion_matrix)
 	evaluation = np.row_stack((macro_result,instance_result,micro_result))
-	evaluation_result = pd.DataFrame(evaluation,index=["macro avg","samples avg","micro avg"],columns = ["Precision","Recall","F1","MCC","nMCC"])
+	evaluation_result = pd.DataFrame(evaluation,index=["macro avg","samples avg","micro avg"],columns = ["Accuracy", "False_Positive_Rate", "False_Negative_Rate", "Zero_Rate", "Specificity", "Precision","Recall","F1","MCC","nMCC"])
 	return evaluation_result
 def random_expectation(input_y_array,input_y_name):
 	multilable_freq = dict(pd.DataFrame(input_y_array,columns=input_y_name).sum())
@@ -228,3 +244,25 @@ def random_expectation(input_y_array,input_y_name):
 	random_expectaion= np.row_stack((macro_random_expectaion,instance_random_expectaion,micro_random_expectaion))
 	random_expectaion_result = pd.DataFrame(random_expectaion,index=["macro avg","samples avg","micro avg"],columns = ["Precision","Recall","F1","MCC","nMCC"])
 	return random_expectaion_result
+
+
+
+
+# from itertools import product
+# bool_list = list(product([True,False],repeat=2))
+# bool_comba_list = list(product(*[bool_list,bool_list,bool_list]))
+
+# for i in bool_comba_list:
+#     transform_dict = {'Pathotroph':{'Mean':i[0][0],'Median':i[0][1]},'Saprotroph':{'Mean':i[1][0],'Median':i[1][1]},'Symbiotroph':{'Mean':i[2][0],'Median':i[2][1]}}
+#     True_Label_Dropna, Hard_Pred_Dropna, Mean_Pred_Dropna, Median_Pred_Dropna = get_prediction_result(input_origin_result = origin_result,
+#                                                                                                   input_prediction_result = prediction_result,
+#                                                                                                   input_label_information = label_Info['trophicMode'],
+#                                                                                                   input_na_index = na_index_test_Info['trophicMode'],
+#                                                                                                   input_transform= transform_dict)
+#     print("-----------------------------------------------------")
+#     print(transform_dict)
+#     print("-----------------------------------------------------")
+#     for name,method_array in zip(["hard","mean","median"],[Hard_Pred_Dropna, Mean_Pred_Dropna, Median_Pred_Dropna]): 
+#         print(">>>>>>> ",name)
+#         #y_true, y_pred = filter_unknown_label(trophicMode_test_array,np.array(method_df.iloc[:,1:]),na_index_test_Info['trophicMode'])
+#         print(classification_report(True_Label_Dropna.astype(int).tolist(), method_array.tolist(), target_names=label_Info['trophicMode']))

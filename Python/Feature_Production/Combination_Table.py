@@ -44,7 +44,7 @@ def over_one(n):
 
 class Combination_Table: 
 	def __init__(self,input_directory,input_file_type,input_protein_domain_file_path,input_combinations_kount):
-		dir_list = glob(input_directory+"*")
+		dir_list = glob(input_directory+"*.out.format")
 		with open(input_protein_domain_file_path) as f:
 			protein_domain_list = [line.split("\n")[0] for line in f.readlines()]
 		data_list = []
@@ -57,6 +57,7 @@ class Combination_Table:
 			elif input_file_type == "complete":
 				r = pd.read_csv(one_genome_file,sep="\t",header=None,usecols=[1],names=["domain_location"])
 				origin_genome_file_name = one_genome_file.split("/")[-1].replace(".out.format","")
+				# _candida_auris_gca_002759435.Cand_auris_B8441_V2.pep.all.fa.out
 			else:
 				print("parameter require to be fragment or complete")
 			r_dropnohit_list = list(r[~r["domain_location"].isin(["no_hit"])]["domain_location"])
