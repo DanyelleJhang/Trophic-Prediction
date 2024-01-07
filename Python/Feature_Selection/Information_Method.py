@@ -17,6 +17,42 @@ from utility.usage_measurement import hardware_usage
 	- regret
 	- sci_is_independent
 """
+
+# import cupy as cp
+# def entropy(x):
+
+#     """
+#     source from : https://stats.stackexchange.com/questions/346137/how-to-compute-joint-entropy-of-high-dimensional-data
+#     x refer to high dimentioanl array
+#     [[... , ... , ...],
+#      [... , ... , ...]], 
+#      [... , ... , ...]],
+#      ..., 
+#      [... , ... , ...]]]
+#     """
+#     counts = cp.histogramdd(x)[0]
+#     dist = counts / cp.sum(counts)
+#     logs = cp.log2(cp.where(dist > 0, dist, 1))
+#     return -cp.sum(dist * logs)
+
+# def conditional_mutual_information(x, y, z):
+#     """
+#     I(X;Y|Z) = H(X,Z) + H(Y,Z) - H(X,Y,Z) - H(Z)
+#     """
+#     xz = cp.column_stack((x,z))
+#     yz = cp.column_stack((y,z))
+#     xyz = cp.column_stack((x,y,z))
+
+#     return entropy(xz) + entropy(yz) - entropy(xyz) - entropy(z) 
+
+
+# def mutual_information(x, y):
+#     """
+#     I(X;Y) = H(X) + H(Y) - H(X,Y)
+#     """
+#     xy = cp.column_stack((x,y))
+#     return entropy(x) + entropy(y) - entropy(xy)
+
 import numpy as np
 def entropy(data, variables=[], base_2=False):
 	"""
